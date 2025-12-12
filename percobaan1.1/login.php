@@ -1,0 +1,230 @@
+<?php
+session_start();
+require 'koneksi.php';
+
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['username']; // The input ID is 'username', but we treat it as email
+    $password = $_POST['password'];
+
+    // 1. Check if email exists
+    $stmt = $conn->prepare("SELECT id_pelanggan, nama, password FROM pelanggan WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        // 2. Verify Password
+        if (password_verify($password, $row['password'])) {
+            // Login Success
+            $_SESSION['user_id'] = $row['id_pelanggan'];
+            $_SESSION['user_name'] = $row['nama'];
+            $_SESSION['status'] = "login";
+            
+            header("Location: index.php");
+            exit;
+        } else {
+            $error = "Incorrect password!";
+        }
+    } else {
+        $error = "Email not found!";
+    }
+    $stmt->close();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - Bali Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary-orange: #e67e22; 
+            --color-dark-bg: rgba(0, 0, 0, 0.75); 
+            --color-light-text: #fff;
+            --color-input-bg: #fff;
+            --color-label: #ccc;
+            --color-dark-text: #333; /* Pastikan ini terdefinisi jika digunakan di input */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; 
+            color: var(--color-light-text);
+
+            /* Placeholder image */
+            background-image: url('latar_login.jpg'); 
+            background-size: cover;
+            background-position: center;
+        }
+ 
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3); 
+            z-index: 1;
+        }
+
+        /* Container Login Form */
+        .login-container {
+            position: relative;
+            z-index: 2; 
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            
+            background-color: rgba(51, 51, 51, 0.9); 
+            backdrop-filter: blur(4px); 
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--color-light-text);
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--color-label);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--color-input-bg);
+            /* PERBAIKAN: Memastikan warna teks input adalah Hitam (#333) */
+            color: var(--color-dark-text); 
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        /* Opsional: Memperjelas warna placeholder jika tetap ingin digunakan */
+        /*::placeholder { 
+            color: #666; 
+            opacity: 1; 
+        }*/
+
+        .input-group input:focus {
+            border: 2px solid var(--color-primary-orange);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--color-primary-orange);
+            color: var(--color-light-text);
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #d66a1a;
+        }
+        
+        .divider {
+            margin: 25px 0 15px;
+            color: var(--color-label);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: var(--color-label);
+            margin: 0 10px;
+        }
+
+        .signup-link {
+            font-size: 0.9rem;
+            color: var(--color-label);
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            color: var(--color-primary-orange);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>LOG IN</h2>
+        <form>
+            <div class="input-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">LOG IN</button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <p class="signup-link">
+            Don't have an account? <a href="#">Sign up here!</a>
+        </p>
+    </div>
+
+</body>
+</html>
