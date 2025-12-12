@@ -1,5 +1,5 @@
 <?php
-require 'koneksi.php';
+require 'config/koneksi.php';
 
 $message = "";
 
@@ -22,13 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $message = "Error: " . $conn->error; // Usually happens if email is duplicate
     }
-    
+
     $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,13 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-primary-orange: #e67e22; 
-            --color-dark-bg: rgba(0, 0, 0, 0.75); 
+            --color-primary-orange: #e67e22;
+            --color-dark-bg: rgba(0, 0, 0, 0.75);
             --color-light-text: #fff;
             --color-input-bg: #fff;
             --color-label: #ccc;
             /* PERBAIKAN: Tambahkan definisi dark text */
-            --color-dark-text: #333; 
+            --color-dark-text: #333;
         }
 
         * {
@@ -59,8 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             align-items: center;
             min-height: 100vh;
             color: var(--color-light-text);
-            
-            background-image: url('latar_login.jpg'); 
+
+            background-image: url('assets/bg_responsi.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -79,13 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         /* Container Register Form */
         .register-container {
             position: relative;
-            z-index: 2; 
+            z-index: 2;
             width: 90%;
             max-width: 400px;
             padding: 40px;
-            
+
             background-color: rgba(51, 51, 51, 0.9);
-            backdrop-filter: blur(4px); 
+            backdrop-filter: blur(4px);
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
@@ -122,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             background-color: var(--color-input-bg);
             /* Memastikan teks yang diketik berwarna gelap */
-            color: var(--color-dark-text); 
+            color: var(--color-dark-text);
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
@@ -143,14 +144,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            margin-top: 10px; 
+            margin-top: 10px;
             transition: background-color 0.3s;
         }
 
         .register-btn:hover {
             background-color: #d66a1a;
         }
-        
+
         .login-link {
             font-size: 0.9rem;
             color: var(--color-label);
@@ -169,33 +170,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
+
 <body>
 
     <div class="register-container">
         <h2>SIGN UP</h2>
-        <form>
+        <form method="POST">
             <div class="input-group">
                 <label for="fullname">Full Name</label>
-                <input type="text" id="fullname" required>
+                <input type="text" id="fullname" name="fullname" required>
             </div>
-            
+
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" required>
+                <input type="email" id="email" name="email" required>
             </div>
-            
+
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" name="password" required>
             </div>
-            
+
             <button type="submit" class="register-btn">SIGN UP</button>
         </form>
 
         <p class="login-link">
-            Already have an account? <a href="#">Log in here!</a>
+            Already have an account? <a href="login.php">Log in here!</a>
         </p>
     </div>
 
 </body>
+
 </html>
