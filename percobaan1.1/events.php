@@ -23,6 +23,7 @@ $result = mysqli_query($conn, $query);
 
     <style>
         :root {
+    
             --color-primary-orange: #e67e22;
             --color-secondary-krem: #f5f0e1;
             --color-dark-text: #333;
