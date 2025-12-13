@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             min-height: 100vh;
             color: var(--color-light-text);
 
-            background-image: url('assets/bg_responsi.jpg');
+            background-image: url('assets/Background2.jpg');
             background-size: cover;
             background-position: center;
         }

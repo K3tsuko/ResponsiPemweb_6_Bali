@@ -135,7 +135,7 @@ require 'config/koneksi.php';
         .hero {
             position: relative;
             height: 90vh;
-            background: url('assets/bg_responsi.jpg') no-repeat center center/cover;
+            background: url('assets/Background1.jpg') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;

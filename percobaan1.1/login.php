@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: var(--color-light-text);
 
             /* Placeholder image */
-            background-image: url('assets/bg_responsi.jpg');
+            background-image: url('assets/Background2.png');
             background-size: cover;
             background-position: center;
         }
