@@ -1,58 +1,48 @@
 <?php
-session_start();
-require 'config/koneksi.php';
+require 'koneksi.php';
 
-$error = "";
+$message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['username']; // The input ID is 'username', but we treat it as email
+    // 1. Capture data from form
+    $nama = $_POST['fullname'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // 1. Check if email exists
-    $stmt = $conn->prepare("SELECT id_pelanggan, nama, password FROM pelanggan WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // 2. Hash the password for security
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    // 3. Prepare SQL Statement (matches your 'pelanggan' table)
+    $stmt = $conn->prepare("INSERT INTO pelanggan (nama, email, password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nama, $email, $hashed_password);
 
-        // 2. Verify Password
-        if (password_verify($password, $row['password'])) {
-            // Login Success
-            $_SESSION['user_id'] = $row['id_pelanggan'];
-            $_SESSION['user_name'] = $row['nama'];
-            $_SESSION['status'] = "login";
-
-            header("Location: index.php");
-            exit;
-        } else {
-            $error = "Incorrect password!";
-        }
+    // 4. Execute and check
+    if ($stmt->execute()) {
+        echo "<script>alert('Registration Successful! Please Login.'); window.location.href='login.php';</script>";
     } else {
-        $error = "Email not found!";
+        $message = "Error: " . $conn->error; // Usually happens if email is duplicate
     }
+    
     $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page - Bali Events</title>
+    <title>Register Page - Bali Events</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-primary-orange: #e67e22;
-            --color-dark-bg: rgba(0, 0, 0, 0.75);
+            --color-primary-orange: #e67e22; 
+            --color-dark-bg: rgba(0, 0, 0, 0.75); 
             --color-light-text: #fff;
             --color-input-bg: #fff;
             --color-label: #ccc;
-            --color-dark-text: #333;
-            /* Pastikan ini terdefinisi jika digunakan di input */
+            /* PERBAIKAN: Tambahkan definisi dark text */
+            --color-dark-text: #333; 
         }
 
         * {
@@ -69,9 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             align-items: center;
             min-height: 100vh;
             color: var(--color-light-text);
-
-            /* Placeholder image */
-            background-image: url('assets/bg_responsi.jpg');
+            
+            background-image: url('latar_login.jpg'); 
             background-size: cover;
             background-position: center;
         }
@@ -87,22 +76,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             z-index: 1;
         }
 
-        /* Container Login Form */
-        .login-container {
+        /* Container Register Form */
+        .register-container {
             position: relative;
-            z-index: 2;
+            z-index: 2; 
             width: 90%;
             max-width: 400px;
             padding: 40px;
-
+            
             background-color: rgba(51, 51, 51, 0.9);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px); 
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
 
-        .login-container h2 {
+        .register-container h2 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 30px;
@@ -125,30 +114,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .input-group input[type="text"],
+        .input-group input[type="email"],
         .input-group input[type="password"] {
             width: 100%;
             padding: 12px 15px;
             border: none;
             border-radius: 4px;
             background-color: var(--color-input-bg);
-            /* PERBAIKAN: Memastikan warna teks input adalah Hitam (#333) */
-            color: var(--color-dark-text);
+            /* Memastikan teks yang diketik berwarna gelap */
+            color: var(--color-dark-text); 
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
         }
 
-        /* Opsional: Memperjelas warna placeholder jika tetap ingin digunakan */
-        /*::placeholder { 
-            color: #666; 
-            opacity: 1; 
-        }*/
-
         .input-group input:focus {
             border: 2px solid var(--color-primary-orange);
         }
 
-        .login-btn {
+        .register-btn {
             width: 100%;
             padding: 12px 15px;
             background-color: var(--color-primary-orange);
@@ -159,79 +143,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 10px; 
             transition: background-color 0.3s;
         }
 
-        .login-btn:hover {
+        .register-btn:hover {
             background-color: #d66a1a;
         }
-
-        .divider {
-            margin: 25px 0 15px;
-            color: var(--color-label);
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex-grow: 1;
-            height: 1px;
-            background: var(--color-label);
-            margin: 0 10px;
-        }
-
-        .signup-link {
+        
+        .login-link {
             font-size: 0.9rem;
             color: var(--color-label);
             margin-top: 20px;
         }
 
-        .signup-link a {
+        .login-link a {
             color: var(--color-primary-orange);
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s;
         }
 
-        .signup-link a:hover {
+        .login-link a:hover {
             color: #fff;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="login-container">
-        <h2>LOG IN</h2>
-        <?php if ($error): ?>
-            <p style="color: red; margin-bottom: 15px;"><?php echo $error; ?></p>
-        <?php endif; ?>
-        <form method="POST">
+    <div class="register-container">
+        <h2>SIGN UP</h2>
+        <form>
             <div class="input-group">
-                <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" required>
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" required>
             </div>
-
+            
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" required>
             </div>
-
-            <button type="submit" class="login-btn">LOG IN</button>
+            
+            <button type="submit" class="register-btn">SIGN UP</button>
         </form>
 
-        <div class="divider">OR</div>
-
-        <p class="signup-link">
-            Don't have an account? <a href="register.php">Sign up here!</a>
+        <p class="login-link">
+            Already have an account? <a href="#">Log in here!</a>
         </p>
     </div>
 
 </body>
-
 </html>

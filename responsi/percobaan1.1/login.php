@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config/koneksi.php';
+require 'koneksi.php';
 
 $error = "";
 
@@ -16,14 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-
+        
         // 2. Verify Password
         if (password_verify($password, $row['password'])) {
             // Login Success
             $_SESSION['user_id'] = $row['id_pelanggan'];
             $_SESSION['user_name'] = $row['nama'];
             $_SESSION['status'] = "login";
-
+            
             header("Location: index.php");
             exit;
         } else {
@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,13 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-primary-orange: #e67e22;
-            --color-dark-bg: rgba(0, 0, 0, 0.75);
+            --color-primary-orange: #e67e22; 
+            --color-dark-bg: rgba(0, 0, 0, 0.75); 
             --color-light-text: #fff;
             --color-input-bg: #fff;
             --color-label: #ccc;
-            --color-dark-text: #333;
-            /* Pastikan ini terdefinisi jika digunakan di input */
+            --color-dark-text: #333; /* Pastikan ini terdefinisi jika digunakan di input */
         }
 
         * {
@@ -67,15 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; 
             color: var(--color-light-text);
 
             /* Placeholder image */
-            background-image: url('assets/bg_responsi.jpg');
+            background-image: url('latar_login.jpg'); 
             background-size: cover;
             background-position: center;
         }
-
+ 
         body::after {
             content: '';
             position: absolute;
@@ -83,20 +81,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.3); 
             z-index: 1;
         }
 
         /* Container Login Form */
         .login-container {
             position: relative;
-            z-index: 2;
+            z-index: 2; 
             width: 90%;
             max-width: 400px;
             padding: 40px;
-
-            background-color: rgba(51, 51, 51, 0.9);
-            backdrop-filter: blur(4px);
+            
+            background-color: rgba(51, 51, 51, 0.9); 
+            backdrop-filter: blur(4px); 
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
@@ -132,12 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             background-color: var(--color-input-bg);
             /* PERBAIKAN: Memastikan warna teks input adalah Hitam (#333) */
-            color: var(--color-dark-text);
+            color: var(--color-dark-text); 
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
         }
-
+        
         /* Opsional: Memperjelas warna placeholder jika tetap ingin digunakan */
         /*::placeholder { 
             color: #666; 
@@ -166,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .login-btn:hover {
             background-color: #d66a1a;
         }
-
+        
         .divider {
             margin: 25px 0 15px;
             color: var(--color-label);
@@ -203,35 +201,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-
 <body>
 
     <div class="login-container">
         <h2>LOG IN</h2>
-        <?php if ($error): ?>
-            <p style="color: red; margin-bottom: 15px;"><?php echo $error; ?></p>
-        <?php endif; ?>
-        <form method="POST">
+        <form>
             <div class="input-group">
                 <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" required>
             </div>
-
+            
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" required>
             </div>
-
+            
             <button type="submit" class="login-btn">LOG IN</button>
         </form>
 
         <div class="divider">OR</div>
 
         <p class="signup-link">
-            Don't have an account? <a href="register.php">Sign up here!</a>
+            Don't have an account? <a href="#">Sign up here!</a>
         </p>
     </div>
 
 </body>
-
 </html>
