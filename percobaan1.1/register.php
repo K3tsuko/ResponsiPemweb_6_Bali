@@ -53,17 +53,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         body {
+            /* Same as login for consistency */
+            background: url('assets/Background/Background2.png') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Roboto', sans-serif;
-            background-color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            color: var(--color-light-text);
-
-            background-image: url('assets/Background2.jpg');
-            background-size: cover;
-            background-position: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
         }
 
         body::after {

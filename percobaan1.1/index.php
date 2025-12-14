@@ -135,7 +135,7 @@ require 'config/koneksi.php';
         .hero {
             position: relative;
             height: 90vh;
-            background: url('assets/Background1.jpg') no-repeat center center/cover;
+            background: url('assets/Background/Background1.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -227,19 +227,39 @@ require 'config/koneksi.php';
         }
 
         .kecak {
-            background-image: url('https://picsum.photos/400/180?blur=5&random=1');
+            background-image: url('assets/event-images/kecak-fire-dance.jpg');
         }
 
         .barong {
-            background-image: url('https://picsum.photos/400/180?blur=5&random=2');
+            background-image: url('assets/event-images/barong-dance.jpg');
         }
 
         .legong {
-            background-image: url('https://picsum.photos/400/180?blur=5&random=3');
+            background-image: url('assets/event-images/legong-keraton-dance.jpg');
         }
 
         .event-details {
             padding: 15px 15px 10px 15px;
+        }
+
+        .event-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .event-info-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #555;
+            gap: 8px;
+        }
+
+        .event-info-item .material-icons {
+            font-size: 18px;
+            color: var(--color-primary-orange);
         }
 
         .event-footer {
@@ -372,6 +392,10 @@ require 'config/koneksi.php';
                         <p class="price-text">From: <strong>IDR 150.000</strong></p>
                         <div class="event-info">
                             <div class="event-info-item">
+                                <span class="material-icons">event</span>
+                                <span>December 28, 2025</span>
+                            </div>
+                            <div class="event-info-item">
                                 <span class="material-icons">schedule</span>
                                 <span>6:00 PM</span>
                             </div>
@@ -394,6 +418,10 @@ require 'config/koneksi.php';
                         <p class="price-text">From: <strong>IDR 100.000</strong></p>
                         <div class="event-info">
                             <div class="event-info-item">
+                                <span class="material-icons">event</span>
+                                <span>January 11, 2026</span>
+                            </div>
+                            <div class="event-info-item">
                                 <span class="material-icons">schedule</span>
                                 <span>9:30 AM</span>
                             </div>
@@ -415,6 +443,10 @@ require 'config/koneksi.php';
                         <h3 class="event-title">Legong Keraton Dance</h3>
                         <p class="price-text">From: <strong>IDR 100.000</strong></p>
                         <div class="event-info">
+                            <div class="event-info-item">
+                                <span class="material-icons">event</span>
+                                <span>January 12, 2026</span>
+                            </div>
                             <div class="event-info-item">
                                 <span class="material-icons">schedule</span>
                                 <span>7:30 PM</span>

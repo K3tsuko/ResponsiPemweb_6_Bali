@@ -2,12 +2,10 @@
 session_start();
 require 'config/koneksi.php';
 
-// 1. QUERY DATABASE
-// Pastikan nama tabel sesuai database kamu (misal: 'events' atau 'tabel_event')
-$query = "SELECT * FROM acara";
+// Fetch all events from the database
+$query = "SELECT * FROM acara ORDER BY tanggal_acara ASC";
 $result = mysqli_query($conn, $query);
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -23,7 +21,6 @@ $result = mysqli_query($conn, $query);
 
     <style>
         :root {
-    
             --color-primary-orange: #e67e22;
             --color-secondary-krem: #f5f0e1;
             --color-dark-text: #333;
@@ -47,7 +44,6 @@ $result = mysqli_query($conn, $query);
             background-color: var(--color-secondary-krem);
         }
 
-        /* Navigasi & Header */
         header {
             position: absolute;
             top: 0;
@@ -101,14 +97,9 @@ $result = mysqli_query($conn, $query);
             transition: background-color 0.3s;
         }
 
-        .login-btn:hover {
-            background-color: #d66a1a;
-        }
-
-        /* Hero Section */
         .hero {
             position: relative;
-            background: url('https://picsum.photos/1600/900?nature') no-repeat center center/cover;
+            background: url('assets/Background/Background3.png') no-repeat center center/cover;
             height: 450px;
             display: flex;
             flex-direction: column;
@@ -152,7 +143,6 @@ $result = mysqli_query($conn, $query);
             font-weight: 300;
         }
 
-        /* Search Bar */
         .search-bar {
             width: 100%;
             display: flex;
@@ -169,7 +159,6 @@ $result = mysqli_query($conn, $query);
             outline: none;
         }
 
-        /* Filter Buttons */
         .filter-buttons {
             display: flex;
             justify-content: center;
@@ -195,7 +184,6 @@ $result = mysqli_query($conn, $query);
             font-weight: 700;
         }
 
-        /* Events Grid Section */
         .events-section {
             padding: 0 50px 50px;
             max-width: 1200px;
@@ -227,6 +215,31 @@ $result = mysqli_query($conn, $query);
             background-position: center;
         }
 
+        /* Hardcoded Static Images */
+        .kecak {
+            background-image: url('assets/event-images/kecak-fire-dance.jpg');
+        }
+
+        .barong {
+            background-image: url('assets/event-images/barong-dance.jpg');
+        }
+
+        .legong {
+            background-image: url('assets/event-images/legong-keraton-dance.jpg');
+        }
+
+        .jangger {
+            background-image: url('assets/event-images/jangger-dance.jpg');
+        }
+
+        .ramayana {
+            background-image: url('assets/event-images/ramayana-dance.jpg');
+        }
+
+        .kebyar {
+            background-image: url('assets/event-images/kebyar-duduk-dance.jpg');
+        }
+
         .event-details {
             padding: 15px;
         }
@@ -253,6 +266,12 @@ $result = mysqli_query($conn, $query);
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .info-group {
@@ -293,7 +312,6 @@ $result = mysqli_query($conn, $query);
             color: var(--color-light-text);
         }
 
-        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -335,6 +353,18 @@ $result = mysqli_query($conn, $query);
                 height: 350px;
             }
 
+            .hero-content {
+                width: 95%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .events-section {
+                padding: 0 20px 40px;
+            }
+
             .events-grid {
                 grid-template-columns: 1fr;
             }
@@ -343,7 +373,6 @@ $result = mysqli_query($conn, $query);
 </head>
 
 <body>
-
     <header>
         <nav id="mainNav">
             <a href="index.php" class="logo">LOGO</a>
@@ -353,12 +382,8 @@ $result = mysqli_query($conn, $query);
                     <a href="events.php">Explore Events</a>
                     <a href="index.php#about">About Us</a>
                 </div>
-
-                <?php if (isset($_SESSION['status']) && $_SESSION['status'] == "login"): ?>
-                    <a href="logout.php" class="login-btn">Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="login-btn">Log In</a>
-                <?php endif; ?>
+                <!-- Static Login Button for now since DB is disconnected -->
+                <a href="login.php" class="login-btn">Log In</a>
             </div>
         </nav>
     </header>
@@ -385,41 +410,46 @@ $result = mysqli_query($conn, $query);
         <section class="events-section">
             <div class="events-grid">
 
-                <?php
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        // SET DEFAULT IMAGE IF NONE EXISTS
-                        $gambar = $row['gambar'] ? $row['gambar'] : 'https://picsum.photos/400/180';
+                <?php if (mysqli_num_rows($result) > 0): ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                        <?php
+                        // Generate slug for image filename
+                        $slug = strtolower(str_replace(' ', '-', $row['nama_acara']));
+                        $image_path = "assets/event-images/" . $slug . ".jpg";
+
+                        // Format date and time
+                        $formatted_date = date('F d, Y', strtotime($row['tanggal_acara']));
+                        $formatted_time = date('g:i A', strtotime($row['waktu_acara']));
                         ?>
-
                         <div class="event-card">
-                            <div class="event-image" style="background-image: url('img/<?php echo $gambar; ?>');"></div>
-
+                            <div class="event-image" style="background-image: url('<?php echo $image_path; ?>');"></div>
                             <div class="event-details">
-                                <h3><?php echo $row['nama_acara']; ?></h3>
-
-                                <p class="price-text">From: <strong>IDR <?php echo number_format($row['harga']); ?></strong></p>
-
+                                <h3><?php echo htmlspecialchars($row['nama_acara']); ?></h3>
+                                <p class="price-text">From: <strong>IDR
+                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?></strong></p>
                                 <div class="event-info-footer">
-                                    <div class="info-group">
-                                        <span class="material-icons">schedule</span>
-                                        <span><?php echo $row['waktu_acara']; ?></span>
+                                    <div class="info-col">
+                                        <div class="info-group">
+                                            <span class="material-icons">event</span>
+                                            <span><?php echo $formatted_date; ?></span>
+                                        </div>
+                                        <div class="info-group">
+                                            <span class="material-icons">schedule</span>
+                                            <span><?php echo $formatted_time; ?></span>
+                                        </div>
                                     </div>
-
-                                    <a href="detail_event.php?id=<?php echo $row['id_acara']; ?>" class="buy-btn">
+                                    <a href="seatmap.php?id=<?php echo $row['id_acara']; ?>" class="buy-btn">
                                         Buy Now
                                         <span class="material-icons">arrow_forward</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>No events found.</p>
+                <?php endif; ?>
 
-                        <?php
-                    } // End While
-                } else {
-                    echo "<p style='text-align:center; grid-column: 1/-1;'>No events found.</p>";
-                }
-                ?>
             </div>
 
             <div class="pagination">
@@ -431,7 +461,6 @@ $result = mysqli_query($conn, $query);
             </div>
         </section>
     </main>
-
 </body>
 
 </html>

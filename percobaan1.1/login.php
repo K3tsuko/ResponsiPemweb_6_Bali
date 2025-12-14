@@ -63,17 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #333;
+            /* Background Image from user assets */
+            background: url('assets/Background/Background2.png') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
             color: var(--color-light-text);
-
-            /* Placeholder image */
-            background-image: url('assets/Background2.png');
-            background-size: cover;
-            background-position: center;
         }
 
         body::after {
