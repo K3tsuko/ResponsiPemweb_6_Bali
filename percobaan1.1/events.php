@@ -154,13 +154,29 @@ $result = mysqli_query($conn, $query);
         }
 
         .search-bar input {
-            width: 100%;
+            flex: 1;
             padding: 15px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 8px 0 0 8px;
             font-size: 1rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             outline: none;
+        }
+
+        .search-btn {
+            padding: 15px 25px;
+            background-color: var(--color-primary-orange);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-btn:hover {
+            background-color: #d35400;
         }
 
         .filter-buttons {
@@ -386,7 +402,11 @@ $result = mysqli_query($conn, $query);
                     <a href="events.php">Explore Events</a>
                     <a href="index.php#about">About Us</a>
                 </div>
-                <a href="login.php" class="login-btn">Log In</a>
+                <?php if (isset($_SESSION['status']) && $_SESSION['status'] == "login"): ?>
+                    <a href="logout.php" class="login-btn">Logout</a>
+                <?php else: ?>
+                    <a href="login.php" class="login-btn">Log In</a>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
@@ -400,14 +420,8 @@ $result = mysqli_query($conn, $query);
                 <form action="" method="GET" class="search-bar">
                     <input type="text" name="cari" placeholder="Search event name..."
                         value="<?php echo isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : ''; ?>">
+                    <button type="submit" class="search-btn">Search</button>
                 </form>
-
-                <div class="filter-buttons">
-                    <button class="active">All</button>
-                    <button>Dance</button>
-                    <button>Music</button>
-                    <button>Ritual</button>
-                </div>
             </div>
         </section>
 
@@ -455,14 +469,6 @@ $result = mysqli_query($conn, $query);
                     </div>
                 <?php endif; ?>
 
-            </div>
-
-            <div class="pagination">
-                <a href="#"><span class="material-icons">chevron_left</span></a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#"><span class="material-icons">chevron_right</span></a>
             </div>
         </section>
     </main>
