@@ -1,6 +1,5 @@
 <?php
 session_start();
-// We DO NOT redirect here anymore, because we want guests to see the landing page.
 require 'config/koneksi.php';
 ?>
 
@@ -27,7 +26,6 @@ require 'config/koneksi.php';
             --color-nav-bg-scrolled: rgba(51, 51, 51, 0.95);
         }
 
-        /* Reset Dasar */
         * {
             margin: 0;
             padding: 0;
@@ -41,7 +39,6 @@ require 'config/koneksi.php';
             background-color: #fff;
         }
 
-        /* Navigasi & Header Semantik */
         header {
             position: fixed;
             top: 0;
@@ -59,18 +56,16 @@ require 'config/koneksi.php';
             transition: background-color 0.3s, padding 0.3s;
         }
 
-        /* Kelas yang ditambahkan oleh JS saat di-scroll */
         nav.scrolled {
             background-color: var(--color-nav-bg-scrolled);
             padding: 10px 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Kontainer untuk link dan tombol login */
         .nav-right {
             display: flex;
             align-items: center;
             gap: 30px;
-            /* Jarak antara nav-links dan tombol login */
         }
 
         .logo {
@@ -79,7 +74,12 @@ require 'config/koneksi.php';
             color: var(--color-light-text);
             padding: 5px 10px;
             border: 1px solid var(--color-light-text);
-            transition: color 0.3s, border-color 0.3s;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            background-color: var(--color-light-text);
+            color: var(--color-dark-text);
         }
 
         .nav-links {
@@ -92,35 +92,51 @@ require 'config/koneksi.php';
             color: var(--color-light-text);
             text-decoration: none;
             font-size: 0.9rem;
+            position: relative;
             opacity: 0.9;
             transition: opacity 0.3s;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--color-primary-orange);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
             opacity: 1;
         }
 
-        /* Styling Tombol Login */
         .login-btn {
             background-color: var(--color-primary-orange);
-            /* Diubah ke warna primary untuk kontras */
             color: var(--color-light-text);
-            padding: 8px 15px;
+            padding: 8px 20px;
             border-radius: 5px;
             font-weight: bold;
             text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .login-btn:hover {
             background-color: #d66a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.4);
         }
 
         .login-btn-mobile {
             display: none;
         }
 
-        /* Hamburger Menu (Hanya terlihat di mobile) */
         .hamburger-menu {
             display: none;
             cursor: pointer;
@@ -131,10 +147,9 @@ require 'config/koneksi.php';
             font-size: 30px;
         }
 
-        /* --- Bagian Lain (Hero, Popular Section, Footer) Sama seperti sebelumnya --- */
         .hero {
             position: relative;
-            height: 90vh;
+            height: 100vh;
             background: url('assets/Background/Background1.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
@@ -158,120 +173,163 @@ require 'config/koneksi.php';
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 700px;
+            max-width: 800px;
             padding: 20px;
         }
 
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
             letter-spacing: 2px;
             text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .hero p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            font-weight: 400;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .explore-btn {
             background-color: var(--color-primary-orange);
             color: var(--color-light-text);
-            padding: 12px 30px;
+            padding: 15px 40px;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-size: 1rem;
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
+            transition: all 0.3s ease;
             text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: inline-block;
         }
 
-        /* Popular Events Section */
+        .explore-btn:hover {
+            background-color: #d66a1a;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4);
+        }
+
         .popular-section {
             background-color: var(--color-secondary-krem);
-            padding: 50px 50px;
+            padding: 80px 50px;
         }
 
         .popular-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            margin-bottom: 40px;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--color-dark-text);
-            text-align: left;
+            text-align: center; 
+            letter-spacing: 1px;
         }
 
         .events-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .event-card {
             background-color: var(--color-card-bg);
-            border-radius: 5px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             text-align: left;
-            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(230, 126, 34, 0.15);
+            border-color: rgba(230, 126, 34, 0.3);
         }
 
         .event-image {
-            height: 180px;
+            height: 200px;
             background-size: cover;
             background-position: center;
+            transition: transform 0.6s ease;
         }
 
-        .kecak {
-            background-image: url('assets/event-images/kecak-fire-dance.jpg');
+        .event-card:hover .event-image {
+            transform: scale(1.1);
         }
 
-        .barong {
-            background-image: url('assets/event-images/barong-dance.jpg');
-        }
-
-        .legong {
-            background-image: url('assets/event-images/legong-keraton-dance.jpg');
-        }
+        .kecak { background-image: url('assets/event-images/kecak-fire-dance.jpg'); }
+        .barong { background-image: url('assets/event-images/barong-dance.jpg'); }
+        .legong { background-image: url('assets/event-images/legong-keraton-dance.jpg'); }
 
         .event-details {
-            padding: 15px 15px 10px 15px;
+            padding: 25px;
+        }
+
+        .event-title {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: var(--color-dark-text);
         }
 
         .event-info {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 15px;
         }
 
         .event-info-item {
             display: flex;
             align-items: center;
-            font-size: 0.9rem;
-            color: #555;
-            gap: 8px;
+            font-size: 0.95rem;
+            color: #666;
+            gap: 10px;
         }
 
         .event-info-item .material-icons {
-            font-size: 18px;
+            font-size: 20px;
             color: var(--color-primary-orange);
+        }
+
+        .price-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .price-text strong {
+            font-size: 1.1rem;
+            color: var(--color-dark-text);
         }
 
         .event-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .event-genre {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
         }
 
         .buy-btn {
             background-color: var(--color-primary-orange);
             color: var(--color-light-text);
-            padding: 8px 20px;
+            padding: 10px 25px;
             border: none;
             border-radius: 5px;
             font-size: 0.9rem;
@@ -279,64 +337,52 @@ require 'config/koneksi.php';
             font-weight: bold;
             text-transform: uppercase;
             text-decoration: none;
-            transition: background-color 0.3s, transform 0.1s;
+            transition: all 0.3s ease;
         }
 
+        .buy-btn:hover {
+            background-color: #d66a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+        }
 
-        /* Footer */
         footer {
             background-color: var(--color-dark-text);
             color: var(--color-light-text);
-            padding: 30px 50px;
+            padding: 40px 50px;
             text-align: center;
             font-size: 0.9rem;
         }
 
-        /* Media Query untuk Responsif */
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 20px;
-            }
+            nav { padding: 15px 20px; }
+            .hero h1 { font-size: 2.2rem; }
+            .popular-section { padding: 50px 20px; }
+            
+            .hamburger-menu { display: block; }
+            .nav-links, .login-btn-desktop { display: none; }
 
-            /* 1. Aktifkan Hamburger dan Sembunyikan Nav-Links Default */
-            .hamburger-menu {
-                display: block;
-            }
-
-            /* Sembunyikan Nav-Links default dan Tombol Login di mobile */
-            .nav-links,
-            .login-btn-desktop {
-                display: none;
-            }
-
-            /* Layout Mobile Menu */
             .nav-links {
                 flex-direction: column;
                 position: absolute;
-                top: 50px;
+                top: 60px; 
                 left: 0;
                 width: 100%;
                 background-color: var(--color-nav-bg-scrolled);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                padding: 10px 0;
-                gap: 10px;
+                padding: 20px 0;
+                gap: 15px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             }
 
-            /* Kelas yang ditambahkan JS untuk menampilkan menu */
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links a {
-                padding: 10px 20px;
-                text-align: center;
-                width: 100%;
-            }
-
-            /* Tampilkan Tombol Login di dalam menu mobile */
+            .nav-links.active { display: flex; }
+            .nav-links a { width: 100%; text-align: center; padding: 10px 0; }
+            .nav-links a:hover { background-color: rgba(255,255,255,0.05); }
+            
             .nav-links a.login-btn-mobile {
-                display: block;
+                display: inline-block;
+                width: auto;
                 background-color: var(--color-primary-orange);
+                padding: 10px 30px;
             }
         }
     </style>
@@ -406,7 +452,7 @@ require 'config/koneksi.php';
                         </div>
                         <div class="event-footer">
                             <span class="event-genre">#sunset-show</span>
-                            <a href="/checkout/kecak" class="buy-btn">Buy Now</a>
+                            <a href="seatmap.php?id=1" class="buy-btn">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -432,7 +478,7 @@ require 'config/koneksi.php';
                         </div>
                         <div class="event-footer">
                             <span class="event-genre">#folklore</span>
-                            <a href="/checkout/barong" class="buy-btn">Buy Now</a>
+                            <a href="seatmap.php?id=2" class="buy-btn">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -458,7 +504,7 @@ require 'config/koneksi.php';
                         </div>
                         <div class="event-footer">
                             <span class="event-genre">#royal-dance</span>
-                            <a href="/checkout/legong" class="buy-btn">Buy Now</a>
+                            <a href="seatmap.php?id=3" class="buy-btn">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -478,19 +524,16 @@ require 'config/koneksi.php';
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger-menu');
             const menuIcon = document.getElementById('menuIcon');
-            // Memilih semua tautan yang mengarah ke ID di halaman
             const allLinks = document.querySelectorAll('a[href^="#"], .explore-btn');
 
-            // 1. Efek Scroll Navigasi Sticky
             window.addEventListener('scroll', function () {
-                if (window.scrollY > 100) {
+                if (window.scrollY > 50) {
                     nav.classList.add('scrolled');
                 } else {
                     nav.classList.remove('scrolled');
                 }
             });
 
-            // 2. Toggle Menu Hamburger
             hamburger.addEventListener('click', function () {
                 navLinks.classList.toggle('active');
                 if (navLinks.classList.contains('active')) {
@@ -500,22 +543,23 @@ require 'config/koneksi.php';
                 }
             });
 
-            // 3. Smooth Scroll 
             allLinks.forEach(link => {
                 link.addEventListener('click', function (e) {
                     const targetId = this.getAttribute('href');
                     if (targetId && targetId.startsWith('#')) {
                         e.preventDefault();
 
-                        // Tutup menu mobile setelah klik (jika terbuka)
                         if (navLinks.classList.contains('active')) {
                             navLinks.classList.remove('active');
                             menuIcon.textContent = 'menu';
                         }
 
-                        document.querySelector(targetId).scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                 });
             });

@@ -2,8 +2,14 @@
 session_start();
 require 'config/koneksi.php';
 
-// Fetch all events from the database
-$query = "SELECT * FROM acara ORDER BY tanggal_acara ASC";
+if (isset($_GET['cari'])) {
+    $cari = mysqli_real_escape_string($conn, $_GET['cari']);
+
+    $query = "SELECT * FROM acara WHERE nama_acara LIKE '%$cari%' ORDER BY tanggal_acara ASC";
+} else {
+    $query = "SELECT * FROM acara ORDER BY tanggal_acara ASC";
+}
+
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -45,11 +51,12 @@ $result = mysqli_query($conn, $query);
         }
 
         header {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
         }
 
         nav {
@@ -67,6 +74,7 @@ $result = mysqli_query($conn, $query);
             border: 1px solid var(--color-light-text);
             transition: color 0.3s, border-color 0.3s;
             text-decoration: none;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         .nav-right {
@@ -84,7 +92,9 @@ $result = mysqli_query($conn, $query);
             color: var(--color-light-text);
             text-decoration: none;
             font-size: 0.9rem;
-            opacity: 0.9;
+            opacity: 1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            font-weight: 500;
         }
 
         .login-btn {
@@ -95,31 +105,23 @@ $result = mysqli_query($conn, $query);
             font-weight: bold;
             text-decoration: none;
             transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .hero {
             position: relative;
-            background: url('assets/Background/Background3.png') no-repeat center center/cover;
-            height: 450px;
+            background: url('assets/Background/Background3.png') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: var(--color-light-text);
-            padding-top: 100px;
+            padding-top: 0;
             margin-bottom: 50px;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            z-index: 1;
         }
 
         .hero-content {
@@ -135,12 +137,14 @@ $result = mysqli_query($conn, $query);
             font-size: 2.5rem;
             margin-bottom: 5px;
             letter-spacing: 1px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .hero p {
             font-size: 1rem;
             margin-bottom: 25px;
-            font-weight: 300;
+            font-weight: 400;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
         }
 
         .search-bar {
@@ -155,7 +159,7 @@ $result = mysqli_query($conn, $query);
             border: none;
             border-radius: 8px;
             font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             outline: none;
         }
 
@@ -176,6 +180,7 @@ $result = mysqli_query($conn, $query);
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
             font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .filter-buttons button.active {
@@ -198,50 +203,37 @@ $result = mysqli_query($conn, $query);
 
         .event-card {
             background-color: var(--color-card-bg);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .event-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(230, 126, 34, 0.15);
+            border-color: rgba(230, 126, 34, 0.3);
         }
 
         .event-image {
-            height: 180px;
+            width: 100%;
+            height: 250px;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.6s ease;
         }
 
-        /* Hardcoded Static Images */
-        .kecak {
-            background-image: url('assets/event-images/kecak-fire-dance.jpg');
-        }
-
-        .barong {
-            background-image: url('assets/event-images/barong-dance.jpg');
-        }
-
-        .legong {
-            background-image: url('assets/event-images/legong-keraton-dance.jpg');
-        }
-
-        .jangger {
-            background-image: url('assets/event-images/jangger-dance.jpg');
-        }
-
-        .ramayana {
-            background-image: url('assets/event-images/ramayana-dance.jpg');
-        }
-
-        .kebyar {
-            background-image: url('assets/event-images/kebyar-duduk-dance.jpg');
+        .event-card:hover .event-image {
+            transform: scale(1.1);
         }
 
         .event-details {
-            padding: 15px;
+            padding: 20px;
+            background: white;
+            position: relative;
         }
 
         .event-details h3 {
@@ -266,6 +258,9 @@ $result = mysqli_query($conn, $query);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
 
         .info-col {
@@ -278,11 +273,11 @@ $result = mysqli_query($conn, $query);
             display: flex;
             align-items: center;
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .info-group .material-icons {
-            font-size: 18px;
+            font-size: 16px;
             margin-right: 5px;
             color: var(--color-primary-orange);
         }
@@ -300,11 +295,16 @@ $result = mysqli_query($conn, $query);
             display: flex;
             align-items: center;
             gap: 5px;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .buy-btn:hover {
             background-color: #d66a1a;
+            transform: translateX(3px);
+        }
+
+        .event-card:hover .buy-btn {
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
         }
 
         .buy-btn .material-icons {
@@ -350,7 +350,7 @@ $result = mysqli_query($conn, $query);
             }
 
             .hero {
-                height: 350px;
+                height: 100vh;
             }
 
             .hero-content {
@@ -368,6 +368,10 @@ $result = mysqli_query($conn, $query);
             .events-grid {
                 grid-template-columns: 1fr;
             }
+
+            .event-image {
+                height: 200px;
+            }
         }
     </style>
 </head>
@@ -382,7 +386,6 @@ $result = mysqli_query($conn, $query);
                     <a href="events.php">Explore Events</a>
                     <a href="index.php#about">About Us</a>
                 </div>
-                <!-- Static Login Button for now since DB is disconnected -->
                 <a href="login.php" class="login-btn">Log In</a>
             </div>
         </nav>
@@ -394,9 +397,10 @@ $result = mysqli_query($conn, $query);
                 <h1>DISCOVER BALINESE CULTURE</h1>
                 <p>Find the perfect performance for your holiday</p>
 
-                <div class="search-bar">
-                    <input type="text" placeholder="Search event name...">
-                </div>
+                <form action="" method="GET" class="search-bar">
+                    <input type="text" name="cari" placeholder="Search event name..."
+                        value="<?php echo isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : ''; ?>">
+                </form>
 
                 <div class="filter-buttons">
                     <button class="active">All</button>
@@ -413,11 +417,9 @@ $result = mysqli_query($conn, $query);
                 <?php if (mysqli_num_rows($result) > 0): ?>
                     <?php while ($row = mysqli_fetch_assoc($result)): ?>
                         <?php
-                        // Generate slug for image filename
                         $slug = strtolower(str_replace(' ', '-', $row['nama_acara']));
                         $image_path = "assets/event-images/" . $slug . ".jpg";
 
-                        // Format date and time
                         $formatted_date = date('F d, Y', strtotime($row['tanggal_acara']));
                         $formatted_time = date('g:i A', strtotime($row['waktu_acara']));
                         ?>
@@ -447,7 +449,10 @@ $result = mysqli_query($conn, $query);
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <p>No events found.</p>
+                    <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                        <h3>No events found for "<?php echo htmlspecialchars($_GET['cari']); ?>"</h3>
+                        <p><a href="index.php" style="color: var(--color-primary-orange);">View all events</a></p>
+                    </div>
                 <?php endif; ?>
 
             </div>
@@ -461,6 +466,47 @@ $result = mysqli_query($conn, $query);
             </div>
         </section>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const navbar = document.getElementById('mainNav');
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    navbar.style.backgroundColor = 'var(--color-nav-bg-scrolled)';
+                } else {
+                    navbar.style.backgroundColor = 'transparent';
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('.filter-buttons button');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        });
+    </script>
 </body>
 
 </html>
